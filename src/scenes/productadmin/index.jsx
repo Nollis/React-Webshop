@@ -9,24 +9,23 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import Add from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import AddProduct from "../../components/products/AddProduct";
 import api from "../../http-common"
-import axios from "axios";
 import {
   GridRowModes,
   GridToolbarContainer,
   GridActionsCellItem,
 } from "@mui/x-data-grid";
 
+
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
 
   const handleClick = () => {
-    const id = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
-    setRows((oldRows) => [...oldRows, { candyName: '', candyDescription: '', candyPrice: '', candyImage: '', isNew: true }]);
+    const candyId = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
+    setRows((oldRows) => [...oldRows, {candyId, candyName: '', candyDescription: '', candyPrice: '', candyCategoryId: '', candyImage: '', isNew: true }]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+      [candyId]: { mode: GridRowModes.Edit, fieldToFocus: 'candyName' },
     }));
   };
 
@@ -45,13 +44,13 @@ EditToolbar.propTypes = {
 };
 
 const Productadmin = () => {
-  const [rows, setRows] = React.useState([]);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+  const [editCandy, setEditCandy] = React.useState(false);
+  const [rows, setRows] = useState([]);
+  const [rowModesModel, setRowModesModel] = useState({});
 
   useEffect(() => {
     api.get("/api/Candy").then((res) => {
       setRows(res.data);
-      console.log(rows);
     });
   }, []);
 
@@ -65,6 +64,7 @@ const Productadmin = () => {
 
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    setEditCandy(true);
   };
 
   const handleSaveClick = (id) => () => {
@@ -85,6 +85,8 @@ const Productadmin = () => {
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
+    setEditCandy(false);
+
     const editedRow = rows.find((row) => row.candyId === id);
     if (editedRow.isNew) {
       setRows(rows.filter((row) => row.candyId !== id));
@@ -92,16 +94,29 @@ const Productadmin = () => {
   };
 
   const processRowUpdate = (newRow, oldRow) => {
-    api.put(`/api/Candy/${newRow.candyId}`, newRow).then((res) => {
-      console.log(res.data);
-    });
+    debugger;
+    if(editCandy === true) {
+      console.log("row has been edited"); 
+      api.put(`/api/Candy/${newRow.candyId}`, newRow).then((res) => {
+        console.log(res.data);
+      });
+      setEditCandy(false);
+    }
+    else {
+      console.log("the row is new")
+      api.post(`/api/Candy/create`, {candyName: newRow.candyName, candyDescription: newRow.candyDescription, candyPrice: newRow.candyPrice, candyCategoryId: newRow.candyCategoryId, candyImage: newRow.candyImage,}).then((res) => {
+        console.log(res.data);
+      });
+    }
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.candyId === newRow.candyId ? updatedRow : row)));
     return updatedRow;
   };
 
+  //const categoryOptions: { value: Int; label: string }
+
   const columns = [
-    { field: "candyId", type: "number", headerName: "Id" },
+    { field: "candyId", type: "number", headerName: "Id", hide: true, },
     {
       field: "candyName",
       headerName: "Name",
@@ -122,6 +137,26 @@ const Productadmin = () => {
       renderCell: (params) => (
         <Typography color={"#000000"}>${params.row.candyPrice}</Typography>
       ),
+    },
+    {
+      field: "candyCategoryId",
+      headerName: "Category",
+      type: 'singleSelect',
+        valueOptions: [
+            { value: 1, label: 'Choklad' },
+            { value: 2, label: 'Lakrits' },
+            { value: 3, label: 'Tuggumi' }
+        ],
+        // valueFormatter: ({ id: rowId, value, field, api }) => {
+        //   const colDef = api.getColumn(field);
+        //   const option = colDef.valueOptions.find(
+        //     ({ value: optionValue }) => value === optionValue
+        //   );
+    
+        //   return option.label;
+        // },
+      flex: 1,
+      editable: true,
     },
     {
       field: "candyImage",

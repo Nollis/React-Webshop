@@ -24,6 +24,11 @@ const Topbar = (props) => {
           </Link>
         </Box>
         <Box m="0" p="5px" justifyContent="center" borderRadius="4px">
+          <Link to="/categoryadmin" className="menu-item">
+            <span>Category Admin</span>
+          </Link>
+        </Box>
+        <Box m="0" p="5px" justifyContent="center" borderRadius="4px">
           <Link to="/customers" className="menu-item">
             <span>Customer Admin</span>
           </Link>

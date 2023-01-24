@@ -1,26 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import css from "./Products.module.css";
 import Plane from "../../assets/plane.png";
-import Product from './Product';
+import Product from "./Product";
 import axios from "axios";
+import api from "../../http-common";
 //import {useAutoAnimate} from '@formkit/auto-animate/react'
 
 const Products = (props) => {
-  const { cartItems, onAdd, onRemove } = props;
+  const { allcandies, cartItems, onAdd, onRemove } = props;
 
   const [candies, setCandies] = useState([]);
+  const [filtered, setFiltered] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  // useEffect(() => {
+  //   api.get("/api/Candy").then((result) => {
+  //     setCandies(result.data);
+  //   });
+  // }, []);
 
   useEffect(() => {
-    axios.get("https://localhost:7127/api/Candy")
-    .then(result => setCandies(result.data))
-  },[]);
+    const fetchData = async () => {
+      try {
+        const res = await api.get("/api/Candy");
+        setCandies(res.data);
+        setFiltered(res.data);
+      } catch (err) {
+        throw new Error(err);
+      }
+    };
+    fetchData();
+  }, []);
 
-  console.log(candies);
+  useEffect(() => {
+    api.get("/api/Candy/categories").then((res) => setCategories(res.data));
+  }, []);
 
-  const [MenuProducts, setMenuProducts] = useState(candies);
+  //const [MenuProducts, setMenuProducts] = useState(allcandies);
 
-  const filter = (type) => {
-    setMenuProducts(candies.filter((candy) => candy.type === type));
+  const filter = (categoryId) => {
+    debugger;
+    //setMenuProducts(candies.filter((candy) => candy.candyCategoryId === categoryId));
+    setFiltered(candies.filter((candy) => candy.candyCategoryId === categoryId));
   };
 
   return (
@@ -30,14 +51,18 @@ const Products = (props) => {
 
       <div className={css.products}>
         <ul className={css.menu}>
-          <li onClick={() => setMenuProducts(candies)}>All</li>
-          <li onClick={() => filter("choclate1")}>Choclate 1</li>
-          <li onClick={() => filter("chocolate2")}>Choclate 2</li>
-          <li onClick={() => filter("chocolate3")}>Choclate 3</li>
+          <li onClick={() => setFiltered(candies)}>All</li>
+          {categories.map((e) => {
+            return (
+              <li key={e.categoryId} onClick={() => filter(e.categoryId)}>
+                {e.categoryName}
+              </li>
+            );
+          })}
         </ul>
 
         <div className={css.list}>
-          {candies.map((product) => (
+          {filtered.map((product) => (
             <Product
               key={product.candyId}
               product={product}

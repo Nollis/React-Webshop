@@ -7,6 +7,7 @@ import Account from "./scenes/account";
 import Customers from "./scenes/customers";
 import Cart from "./scenes/cart";
 import Productadmin from "./scenes/productadmin";
+import Categoryadmin from "./scenes/productadmin/categories";
 import Login from "./scenes/login";
 import Footer from "./components/footer/Footer";
 import Main from "./scenes/main";
@@ -76,6 +77,7 @@ function App() {
             }
           />
           <Route path="/productadmin" element={<Productadmin />} />
+          <Route path="/categoryadmin" element={<Categoryadmin />} />
           <Route path="/customers" element={<Customers />} />
           <Route path="/account" element={<Account />} />
           <Route path="/login" element={<Login />} />

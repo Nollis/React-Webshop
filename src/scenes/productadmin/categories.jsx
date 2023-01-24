@@ -1,42 +1,38 @@
-import * as React from "react";
+import * as React from 'react';
+import { useState, useEffect } from 'react';
+import { Box, Typography, Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import Add from "@mui/icons-material/Add";
+import Header from "../../components/Header";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import Add from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { DataGrid } from "@mui/x-data-grid";
+import api from "../../http-common"
 import {
   GridRowModes,
   GridToolbarContainer,
   GridActionsCellItem,
 } from "@mui/x-data-grid";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import api from "../../http-common"
-import Header from "../../components/Header";
 
 
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
 
   const handleClick = () => {
-    const candyId = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
-    setRows((oldRows) => [...oldRows, {candyId, candyName: '', candyDescription: '', candyPrice: '', candyCategoryId: '', candyImage: '', isNew: true }]);
+    const categoryId = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
+    setRows((oldRows) => [...oldRows, {categoryId, categoryName: '', isNew: true }]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [candyId]: { mode: GridRowModes.Edit, fieldToFocus: 'candyName' },
+      [categoryId]: { mode: GridRowModes.Edit, fieldToFocus: 'categoryName' },
     }));
   };
 
   return (
     <GridToolbarContainer>
       <Button variant="primary" startIcon={<Add />} onClick={handleClick}>
-        Add Candy
+        Add Category
       </Button>
     </GridToolbarContainer>
   );
@@ -47,17 +43,16 @@ EditToolbar.propTypes = {
   setRows: PropTypes.func.isRequired,
 };
 
-const Customers = () => {
+const Categoryadmin = () => {
+  const [editCategory, setEditCategory] = React.useState(false);
   const [rows, setRows] = useState([]);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+  const [rowModesModel, setRowModesModel] = useState({});
 
   useEffect(() => {
-    api.get("/api/Candy/users").then((res) => {
+    api.get("/api/Candy/categories").then((res) => {
       setRows(res.data);
     });
   }, []);
-
-  //debugger;
 
   const handleRowEditStart = (params, event) => {
     event.defaultMuiPrevented = true;
@@ -69,6 +64,7 @@ const Customers = () => {
 
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    setEditCategory(true);
   };
 
   const handleSaveClick = (id) => () => {
@@ -76,10 +72,11 @@ const Customers = () => {
   };
 
   const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
-    api.delete(`/api/Candy/users/${id}`).then((res) => {
-        console.log(res.data);
-      });
+    setRows(rows.filter((row) => row.categoryId !== id));
+    //console.log(id);
+    api.delete(`/api/Candy/categories/${id}`).then((res) => {
+      console.log(res.data);
+    });
   };
 
   const handleCancelClick = (id) => () => {
@@ -88,40 +85,40 @@ const Customers = () => {
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rows.find((row) => row.id === id);
+    setEditCategory(false);
+
+    const editedRow = rows.find((row) => row.categoryId === id);
     if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+      setRows(rows.filter((row) => row.categoryId !== id));
     }
   };
 
-  const processRowUpdate = (newRow) => {
+  const processRowUpdate = (newRow, oldRow) => {
+    if(editCategory === true) {
+      console.log("row has been edited"); 
+      api.put(`/api/Candy/categories/${newRow.categoryId}`, newRow).then((res) => {
+        console.log(res.data);
+      });
+      setEditCategory(false);
+    }
+    else {
+      console.log("the row is new")
+      api.post(`/api/Candy/createCategory/`, {categoryName: newRow.categoryName, categoryImage: 'temp',}).then((res) => {
+        console.log(res.data);
+      });
+    }
     const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    setRows(rows.map((row) => (row.categoryId === newRow.categoryId ? updatedRow : row)));
     return updatedRow;
   };
 
   const columns = [
-    { field: "id", headerName: "ID" },
+    { field: "categoryId", type: "number", headerName: "Id", },
     {
-      field: "CustomerFName",
-      headerName: "Firstname",
-      flex: 1,
-    },
-    {
-      field: "CustomerLName",
-      headerName: "Lastname",
-      flex: 1,
-    },
-    {
-      field: "City",
-      headerName: "City",
-      flex: 1,
-    },
-    {
-      field: "PhoneNumber",
-      headerName: "Phone Number",
-      flex: 1,
+      field: "categoryName",
+      headerName: "Category",
       editable: true,
+      flex: 1,
     },
     {
       field: "actions",
@@ -170,7 +167,7 @@ const Customers = () => {
 
   return (
     <Box m="20px">
-      <Header title="Customers" subtitle="Managing the Customers" />
+      <Header title="Categories" subtitle="Administration of categories" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -182,7 +179,7 @@ const Customers = () => {
             borderBottom: "none",
           },
           "& .name-column--cell": {
-            color: "#666666",
+            color: "#FFFFFF",
           },
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: "var(--green)",
@@ -196,31 +193,29 @@ const Customers = () => {
             backgroundColor: "var(--green)",
           },
           "& .MuiCheckbox-root": {
-            color: `${"#666666"} !important`,
+            color: `${"#FFFFFF"} !important`,
           },
         }}
       >
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          getRowId={(rows) => rows.id}
-          editMode="row"
-          rowModesModel={rowModesModel}
-          onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
-          onRowEditStart={handleRowEditStart}
-          onRowEditStop={handleRowEditStop}
-          processRowUpdate={processRowUpdate}
-          components={{
-            Toolbar: EditToolbar,
-          }}
-          componentsProps={{
-            toolbar: { setRows, setRowModesModel },
-          }}
-          experimentalFeatures={{ newEditingApi: true }}
+        <DataGrid rows={rows} columns={columns} 
+            getRowId={(row) => row.categoryId} 
+            editMode="row"
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
+            onRowEditStart={handleRowEditStart}
+            onRowEditStop={handleRowEditStop}
+            processRowUpdate={processRowUpdate}
+            components={{
+              Toolbar: EditToolbar,
+            }}
+            componentsProps={{
+              toolbar: { setRows, setRowModesModel },
+            }}
+            experimentalFeatures={{ newEditingApi: true }}
         />
       </Box>
     </Box>
   );
 };
 
-export default Customers;
+export default Categoryadmin;

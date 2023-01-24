@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 html,
 .content {
@@ -7,7 +8,7 @@ html,
   color: var(--black);
   height: 100%;
   width: 100%;
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 body,

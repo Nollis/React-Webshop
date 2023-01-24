@@ -28,12 +28,12 @@ function Footer() {
 
                     <span className={css.pngLine}>
                         <PhoneIcon className={css.icon}/>
-                        <a href="tel:0702985046">0702-985046</a>
+                        <a href="tel:0111-545454">0111-545454</a>
                     </span>
 
                     <span className={css.pngLine}>
                         <MailIcon className={css.icon}/>
-                        <a href="mailto:nollis@icloud.com">nollis@icloud.com</a>
+                        <a href="mailto:info@candystore.com">info@candystore.com</a>
                     </span>
                 </div>
             </div>

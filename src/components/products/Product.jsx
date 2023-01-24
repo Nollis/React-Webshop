@@ -17,7 +17,7 @@ function product(props) {
     </div>
   </div>
 
-   <img src={`../assets/${product.candyCategoryId}/${product.candyImage}.jpg`} alt="" className="img-p" />
+   <img src={`../assets/${product.candyCategoryId}/${product.candyImage}`} alt="" className="img-p" />
 </div>
   );
 }
