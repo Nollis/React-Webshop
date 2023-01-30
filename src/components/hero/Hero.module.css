@@ -74,13 +74,14 @@
 
 .h_side {
     display: grid;
+    gap: 10px;
     grid-template-rows: 1fr 1fr;
 }
 
 .text1 {
     text-transform: uppercase;
     font-size: 1.5rem;
-    width: min-content;
+    width: max-content;
     display: block;
     font-weight: 600;
 }
@@ -90,11 +91,13 @@
     flex-direction: column;
     width: min-content;
     color: black;
+
 }
 
 .text2>:first-child {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 800;
+    line-height: 40px;
 }
 
 .text2>:nth-child(2) {
@@ -103,6 +106,9 @@
 
 .traffic {
     display: flex;
+    background: #b2e78a;
+    padding: 10px;
+    border-radius: 15px;
     flex-direction: column;
     text-align: right;
 }
@@ -114,6 +120,9 @@
 
 .customers {
     display: flex;
+    background: #b2e78a;
+    padding: 10px;
+    border-radius: 15px;
     flex-direction: column;
     text-align: right;
 }

@@ -11,36 +11,36 @@ import Categoryadmin from "./scenes/productadmin/categories";
 import Login from "./scenes/login";
 import Footer from "./components/footer/Footer";
 import Main from "./scenes/main";
-import axios from 'axios';
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
-  //localStorage.clear();
+  
 
   const onAdd = (product) => {
-    const exist = cartItems.find((x) => x.id === product.id);
+    debugger;
+    const exist = cartItems.find((x) => x.candyId === product.candyId);
     if (exist) {
       const newCartItems = cartItems.map((x) =>
-        x.id === product.id ? { ...exist, qty: exist.qty + 1 } : x
+        x.candyId === product.candyId ? { ...exist, Quantity: exist.Quantity + 1 } : x
       );
       setCartItems(newCartItems);
       localStorage.setItem("cartItems", JSON.stringify(newCartItems));
     } else {
-      const newCartItems = [...cartItems, { ...product, qty: 1 }];
+      const newCartItems = [...cartItems, { ...product, Quantity: 1 }];
       setCartItems(newCartItems);
       localStorage.setItem("cartItems", JSON.stringify(newCartItems));
     }
   };
 
   const onRemove = (product) => {
-    const exist = cartItems.find((x) => x.id === product.id);
-    if (exist.qty === 1) {
-      const newCartItems = cartItems.filter((x) => x.id !== product.id);
+    const exist = cartItems.find((x) => x.candyId === product.candyId);
+    if (exist.Quantity === 1) {
+      const newCartItems = cartItems.filter((x) => x.candyId !== product.candyId);
       setCartItems(newCartItems);
       localStorage.setItem("cartItems", JSON.stringify(newCartItems));
     } else {
       const newCartItems = cartItems.map((x) =>
-        x.id === product.id ? { ...exist, qty: exist.qty - 1 } : x
+        x.candyId === product.candyId ? { ...exist, Quantity: exist.Quantity - 1 } : x
       );
       setCartItems(newCartItems);
       localStorage.setItem("cartItems", JSON.stringify(newCartItems));

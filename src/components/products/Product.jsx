@@ -1,4 +1,4 @@
-
+import { Box, Button, TextField } from "@mui/material";
 import React from 'react'
 import css from "./Products.module.css";
 
@@ -13,7 +13,7 @@ function product(props) {
     </div>
     <span>{product.candyPrice}$</span>
     <div>
-      <button onClick={() => onAdd(product)}>Add To Cart</button>
+      <Button onClick={() => onAdd(product)}>Add To Cart</Button>
     </div>
   </div>
 

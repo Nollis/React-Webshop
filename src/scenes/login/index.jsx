@@ -4,12 +4,43 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
+import api from "../../http-common"
+import {useCookies} from "react-cookie";
 
 const Login = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
+    const [cookies, setCookie] = useCookies(['UserId']);
 
     const handleFormSubmit = (values) => {
-        console.log(values);
+        
+        api.post(`/api/Candy/login`, values).then((res) => {
+            const UID = res.data.userId.replace(/\%20/g, '');
+            console.log(res.data);
+            if (res.data !== '') {
+                setCookie('UserId', UID, {path: '/'} );
+                setCookie('CartId', JSON.stringify(res.data.cartId), {path: '/'} );
+                alert("Successfully logged in!");
+            }
+            else {
+                alert("Loggin failed!");
+            }
+        })
+        .catch(function (res) {
+          console.log(res);
+        });
+        api.get(`/api/Candy/checkadmin`).then((result) => {
+            console.log(result.data);
+            debugger;
+            if (result.data !== '') {
+                setCookie('Admin', JSON.stringify(result.data), {path: '/'} );
+            }
+            else {
+                console.log("Admin failed!");
+            }
+        })
+        .catch(function (result) {
+          console.log(result);
+        });
     }
     return (
     <Box m="20px">

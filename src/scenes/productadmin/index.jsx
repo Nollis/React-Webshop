@@ -47,11 +47,16 @@ const Productadmin = () => {
   const [editCandy, setEditCandy] = React.useState(false);
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     api.get("/api/Candy").then((res) => {
       setRows(res.data);
     });
+  }, []);
+
+  useEffect(() => {
+    api.get("/api/Candy/categories").then((res) => setCategories(res.data));
   }, []);
 
   const handleRowEditStart = (params, event) => {
@@ -142,11 +147,7 @@ const Productadmin = () => {
       field: "candyCategoryId",
       headerName: "Category",
       type: 'singleSelect',
-        valueOptions: [
-            { value: 1, label: 'Choklad' },
-            { value: 2, label: 'Lakrits' },
-            { value: 3, label: 'Tuggumi' }
-        ],
+        valueOptions: [categories],
         // valueFormatter: ({ id: rowId, value, field, api }) => {
         //   const colDef = api.getColumn(field);
         //   const option = colDef.valueOptions.find(

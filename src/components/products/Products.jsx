@@ -1,23 +1,15 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import css from "./Products.module.css";
 import Plane from "../../assets/plane.png";
 import Product from "./Product";
-import axios from "axios";
 import api from "../../http-common";
-//import {useAutoAnimate} from '@formkit/auto-animate/react'
 
 const Products = (props) => {
-  const { allcandies, cartItems, onAdd, onRemove } = props;
+  const { cartItems, onAdd, onRemove } = props;
 
   const [candies, setCandies] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [categories, setCategories] = useState([]);
-
-  // useEffect(() => {
-  //   api.get("/api/Candy").then((result) => {
-  //     setCandies(result.data);
-  //   });
-  // }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,17 +28,13 @@ const Products = (props) => {
     api.get("/api/Candy/categories").then((res) => setCategories(res.data));
   }, []);
 
-  //const [MenuProducts, setMenuProducts] = useState(allcandies);
-
   const filter = (categoryId) => {
-    debugger;
-    //setMenuProducts(candies.filter((candy) => candy.candyCategoryId === categoryId));
     setFiltered(candies.filter((candy) => candy.candyCategoryId === categoryId));
   };
 
   return (
     <div className={css.container}>
-      <img src={Plane} alt="" />
+      <img src={Plane} className="imgPlane" alt="" />
       <h1>Our featured products</h1>
 
       <div className={css.products}>

@@ -52,7 +52,7 @@ const Customers = () => {
   const [rowModesModel, setRowModesModel] = React.useState({});
 
   useEffect(() => {
-    api.get("/api/Candy/users").then((res) => {
+    api.get("/api/Admin/users").then((res) => {
       setRows(res.data);
     });
   }, []);
@@ -101,7 +101,7 @@ const Customers = () => {
   };
 
   const columns = [
-    { field: "id", headerName: "ID" },
+    { field: "UserId", headerName: "ID" },
     {
       field: "CustomerFName",
       headerName: "Firstname",
@@ -110,11 +110,6 @@ const Customers = () => {
     {
       field: "CustomerLName",
       headerName: "Lastname",
-      flex: 1,
-    },
-    {
-      field: "City",
-      headerName: "City",
       flex: 1,
     },
     {

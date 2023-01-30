@@ -7,11 +7,13 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
+import api from "../../http-common"
 
 const Account = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   const navigate = useNavigate();
+
   const [user, setUser] = useState({
     CustomerFName: "",
     CustomerLName: "",
@@ -23,21 +25,19 @@ const Account = () => {
   };
 
   const handleFormSubmit = (values) => {
-    console.log(values);
-
-    axios({
-      method: "POST",
-      url: "https://localhost:7127/api/Candy/create",
-      data: values,
-      headers: {'Content-Type': 'multipart/form-data'}
+    debugger;
+    api.post(`/api/Candy/register`, values)
+    .then((res) => {
+      if (res.data !== '') {
+        alert("Successfully created account!");
+    }
+    else {
+        alert("Something failed!");
+    }
     })
-      .then(function (res) {
-        console.log(res);
-        alert("Successfully signed up!");
-      })
-      .catch(function (res) {
-        console.log(res);
-      });
+    .catch(function (res) {
+      console.log(res);
+    });
   };
 
   return (
@@ -73,10 +73,10 @@ const Account = () => {
                 label="First Name"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.firstName}
-                name="firstName"
-                error={!!touched.firstName && !!errors.firstName}
-                helperText={touched.firstName && errors.firstName}
+                value={values.CustomerFName}
+                name="CustomerFName"
+                error={!!touched.CustomerFName && !!errors.CustomerFName}
+                helperText={touched.CustomerFName && errors.CustomerFName}
                 sx={{ gridColumn: "span 2" }}
               />
               <TextField
@@ -86,10 +86,10 @@ const Account = () => {
                 label="Last Name"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.lastName}
-                name="lastName"
-                error={!!touched.lastName && !!errors.lastName}
-                helperText={touched.lastName && errors.lastName}
+                value={values.CustomerLName}
+                name="CustomerLName"
+                error={!!touched.CustomerLName && !!errors.CustomerLName}
+                helperText={touched.CustomerLName && errors.CustomerLName}
                 sx={{ gridColumn: "span 2" }}
               />
               <TextField
@@ -112,10 +112,10 @@ const Account = () => {
                 label="Contact Number"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.contact}
-                name="contact"
-                error={!!touched.contact && !!errors.contact}
-                helperText={touched.contact && errors.contact}
+                value={values.PhoneNumber}
+                name="PhoneNumber"
+                error={!!touched.PhoneNumber && !!errors.PhoneNumber}
+                helperText={touched.PhoneNumber && errors.PhoneNumber}
                 sx={{ gridColumn: "span 4" }}
               />
               <TextField
@@ -138,10 +138,10 @@ const Account = () => {
                 label="Confirm Password"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.changepassword}
-                name="changepassword"
-                error={!!touched.changepassword && !!errors.changepassword}
-                helperText={touched.changepassword && errors.changepassword}
+                value={values.ConfirmPassword}
+                name="ConfirmPassword"
+                error={!!touched.ConfirmPassword && !!errors.ConfirmPassword}
+                helperText={touched.ConfirmPassword && errors.ConfirmPassword}
                 sx={{ gridColumn: "span 4" }}
               />
             </Box>
@@ -165,15 +165,15 @@ const phoneRegExp =
   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 
 const checkoutSchema = yup.object().shape({
-  firstName: yup.string().required("required"),
-  lastName: yup.string().required("required"),
+  CustomerFName: yup.string().required("required"),
+  CustomerLName: yup.string().required("required"),
   email: yup.string().email("invalid email").required("required"),
-  contact: yup
+  PhoneNumber: yup
     .string()
     .matches(phoneRegExp, "Phone number is not valid")
     .required("required"),
   password: yup.string().required("required"),
-  changepassword: yup.string().when("password", {
+  ConfirmPassword: yup.string().when("password", {
     is: (val) => (val && val.length > 0 ? true : false),
     then: yup
       .string()
@@ -184,10 +184,10 @@ const checkoutSchema = yup.object().shape({
 const initialValues = {
   CustomerFName: "",
   CustomerLName: "",
-  Email: "",
+  email: "",
   PhoneNumber: "",
   password: "",
-  changepassword: "",
+  ConfirmPassword: "",
 };
 
 export default Account;
