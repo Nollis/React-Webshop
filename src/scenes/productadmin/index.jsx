@@ -79,7 +79,7 @@ const Productadmin = () => {
   const handleDeleteClick = (id) => () => {
     setRows(rows.filter((row) => row.candyId !== id));
     //console.log(id);
-    api.delete(`/api/Candy/${id}`).then((res) => {
+    api.delete(`/api/Admin/${id}`).then((res) => {
       console.log(res.data);
     });
   };
@@ -99,17 +99,16 @@ const Productadmin = () => {
   };
 
   const processRowUpdate = (newRow, oldRow) => {
-    debugger;
     if(editCandy === true) {
       console.log("row has been edited"); 
-      api.put(`/api/Candy/${newRow.candyId}`, newRow).then((res) => {
+      api.put(`/api/Admin/${newRow.candyId}`, newRow).then((res) => {
         console.log(res.data);
       });
       setEditCandy(false);
     }
     else {
       console.log("the row is new")
-      api.post(`/api/Candy/create`, {candyName: newRow.candyName, candyDescription: newRow.candyDescription, candyPrice: newRow.candyPrice, candyCategoryId: newRow.candyCategoryId, candyImage: newRow.candyImage,}).then((res) => {
+      api.post(`/api/Admin/create`, {candyName: newRow.candyName, candyDescription: newRow.candyDescription, candyPrice: newRow.candyPrice, candyCategoryId: newRow.candyCategoryId, candyImage: newRow.candyImage,}).then((res) => {
         console.log(res.data);
       });
     }
@@ -147,7 +146,7 @@ const Productadmin = () => {
       field: "candyCategoryId",
       headerName: "Category",
       type: 'singleSelect',
-        valueOptions: [categories],
+        valueOptions: [{label: 'Choklad', value: 1},{label: 'Gummies', value: 2},{label: 'Hard Candy', value: 3},{label: 'Lollipops', value: 4}],
         // valueFormatter: ({ id: rowId, value, field, api }) => {
         //   const colDef = api.getColumn(field);
         //   const option = colDef.valueOptions.find(

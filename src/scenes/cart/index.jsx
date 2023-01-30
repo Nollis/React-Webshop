@@ -16,7 +16,7 @@ function Cart(props) {
   const totalPrice = itemsPrice + taxPrice + shippingPrice;
 
   function postOrderItem(orderItem) {
-    debugger;
+    
     return api.post(`/api/Candy/add`, orderItem);
   }
 
@@ -37,10 +37,9 @@ function Cart(props) {
         postOrderItem(orderItem)
           .then((res) => {
             i++;
-            console.log("success");
             console.log(res.data);
             if(i === addCartId.length) {
-              console.log("Promise fulfilled");
+              localStorage.clear();
             }
           })
           .catch((err) => {

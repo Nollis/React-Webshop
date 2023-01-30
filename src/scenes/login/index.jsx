@@ -30,7 +30,7 @@ const Login = () => {
         });
         api.get(`/api/Candy/checkadmin`).then((result) => {
             console.log(result.data);
-            debugger;
+            
             if (result.data !== '') {
                 setCookie('Admin', JSON.stringify(result.data), {path: '/'} );
             }

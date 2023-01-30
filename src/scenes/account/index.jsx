@@ -25,7 +25,7 @@ const Account = () => {
   };
 
   const handleFormSubmit = (values) => {
-    debugger;
+    
     api.post(`/api/Candy/register`, values)
     .then((res) => {
       if (res.data !== '') {

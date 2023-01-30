@@ -97,7 +97,7 @@ export default function AddProduct() {
   };
 
   const handleSubmit = async (event) => {
-    debugger;
+    
     event.preventDefault();
     await http
       .post(`/api/Candy/create`, candy)

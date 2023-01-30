@@ -17,8 +17,8 @@
 
 .products {
     display: grid;
-    width: 90%;
-    grid-template-columns: 25% auto;
+    width: 82%;
+    grid-template-columns: 15% auto;
 }
 
 .menu {
@@ -58,6 +58,11 @@
 .product>img {
     top: 3rem;
     width: 6rem;
+    z-index: 0;
+}
+
+.name {
+    z-index: 1;
 }
 
 @media screen and (max-width: 856px) {

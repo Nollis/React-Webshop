@@ -17,7 +17,7 @@ function App() {
   
 
   const onAdd = (product) => {
-    debugger;
+    
     const exist = cartItems.find((x) => x.candyId === product.candyId);
     if (exist) {
       const newCartItems = cartItems.map((x) =>
@@ -49,7 +49,7 @@ function App() {
 
   const [isPending, startTransition] = useTransition();
 
-  //debugger;
+  //
 
   useEffect(() => {
     startTransition(() => {

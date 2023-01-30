@@ -106,9 +106,6 @@
 
 .traffic {
     display: flex;
-    background: #b2e78a;
-    padding: 10px;
-    border-radius: 15px;
     flex-direction: column;
     text-align: right;
 }
@@ -120,9 +117,6 @@
 
 .customers {
     display: flex;
-    background: #b2e78a;
-    padding: 10px;
-    border-radius: 15px;
     flex-direction: column;
     text-align: right;
 }
