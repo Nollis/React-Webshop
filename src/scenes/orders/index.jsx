@@ -20,22 +20,6 @@ import {
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
 
-  const handleClick = () => {
-    const candyId = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
-    setRows((oldRows) => [...oldRows, {candyId, candyName: '', candyDescription: '', candyPrice: '', candyCategoryId: '', candyImage: '', isNew: true }]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [candyId]: { mode: GridRowModes.Edit, fieldToFocus: 'candyName' },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button variant="primary" startIcon={<Add />} onClick={handleClick}>
-        Add Candy
-      </Button>
-    </GridToolbarContainer>
-  );
 }
 
 EditToolbar.propTypes = {
@@ -43,22 +27,14 @@ EditToolbar.propTypes = {
   setRows: PropTypes.func.isRequired,
 };
 
-const Productadmin = () => {
-  const [editCandy, setEditCandy] = React.useState(false);
+const ItemOrders = () => {
+  const [editCategory, setEditCategory] = React.useState(false);
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
-  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    api.get("/api/Candy").then((res) => {
+    api.get("/api/Admin/itemorders").then((res) => {
       setRows(res.data);
-    });
-  }, []);
-
-  useEffect(() => {
-    api.get("/api/Candy/categories").then((res) => {
-      const recategorize = res.data.map((cat) => ({value: cat.categoryId, label: cat.categoryName}))
-      setCategories(recategorize)
     });
   }, []);
 
@@ -72,7 +48,7 @@ const Productadmin = () => {
 
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-    setEditCandy(true);
+    setEditCategory(true);
   };
 
   const handleSaveClick = (id) => () => {
@@ -80,9 +56,9 @@ const Productadmin = () => {
   };
 
   const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.candyId !== id));
+    setRows(rows.filter((row) => row.itemOrderId !== id));
     //console.log(id);
-    api.delete(`/api/Admin/${id}`).then((res) => {
+    api.delete(`/api/Admin/deleteorders/${id}`).then((res) => {
       console.log(res.data);
     });
   };
@@ -93,80 +69,60 @@ const Productadmin = () => {
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    setEditCandy(false);
+    setEditCategory(false);
 
-    const editedRow = rows.find((row) => row.candyId === id);
+    const editedRow = rows.find((row) => row.itemOrderId === id);
     if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.candyId !== id));
+      setRows(rows.filter((row) => row.itemOrderId !== id));
     }
   };
 
   const processRowUpdate = (newRow, oldRow) => {
-    if(editCandy === true) {
+    if(editCategory === true) {
       console.log("row has been edited"); 
-      api.put(`/api/Admin/${newRow.candyId}`, newRow).then((res) => {
+      api.put(`/api/Admin/updateorders/${newRow.itemOrderId}`, newRow).then((res) => {
         console.log(res.data);
       });
-      setEditCandy(false);
+      setEditCategory(false);
     }
     else {
       console.log("the row is new")
-      api.post(`/api/Admin/create`, {candyName: newRow.candyName, candyDescription: newRow.candyDescription, candyPrice: newRow.candyPrice, candyCategoryId: newRow.candyCategoryId, candyImage: newRow.candyImage,}).then((res) => {
+      api.post(`/api/Candy/createCategory/`, {categoryName: newRow.categoryName, categoryImage: 'temp',}).then((res) => {
         console.log(res.data);
       });
     }
     const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.candyId === newRow.candyId ? updatedRow : row)));
+    setRows(rows.map((row) => (row.itemOrderId === newRow.itemOrderId ? updatedRow : row)));
     return updatedRow;
   };
 
-  //const categoryOptions: { value: Int; label: string }
-
   const columns = [
-    { field: "candyId", type: "number", headerName: "Id", hide: true, },
+    { field: "itemOrderId", type: "number", headerName: "Id", },
     {
       field: "candyName",
-      headerName: "Name",
+      headerName: "Candy",
       editable: true,
       flex: 1,
-    },
-    {
-      field: "candyDescription",
-      headerName: "Description",
-      editable: true,
-      flex: 2,
     },
     {
       field: "candyPrice",
       headerName: "Price",
-      flex: 1,
       editable: true,
-      renderCell: (params) => (
-        <Typography color={"#000000"}>${params.row.candyPrice}</Typography>
-      ),
+      flex: 1,
     },
     {
-      field: "candyCategoryId",
-      headerName: "Category",
-      type: 'singleSelect',
-        //valueOptions: [{label: 'Choklad', value: 1},{label: 'Gummies', value: 2},{label: 'Hard Candy', value: 3},{label: 'Lollipops', value: 4}],
-        valueOptions: categories,
-        // valueFormatter: ({ id: rowId, value, field, api }) => {
-        //   const colDef = api.getColumn(field);
-        //   const option = colDef.valueOptions.find(
-        //     ({ value: optionValue }) => value === optionValue
-        //   );
-    
-        //   return option.label;
-        // },
-      flex: 1,
+      field: "quantity",
+      headerName: "Quantity",
+      type: "number",
       editable: true,
+      flex: 1,
     },
     {
-      field: "candyImage",
-      headerName: "Imagename",
-      flex: 1,
+      field: "cartId",
+      headerName: "Cart Id",
+      type: "number",
       editable: true,
+      flex: 1,
     },
     {
       field: "actions",
@@ -215,7 +171,7 @@ const Productadmin = () => {
 
   return (
     <Box m="20px">
-      <Header title="Products" subtitle="List of Products" />
+      <Header title="Item Orders" subtitle="Administration of item orders" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -246,7 +202,7 @@ const Productadmin = () => {
         }}
       >
         <DataGrid rows={rows} columns={columns} 
-            getRowId={(row) => row.candyId} 
+            getRowId={(row) => row.itemOrderId} 
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
@@ -266,4 +222,4 @@ const Productadmin = () => {
   );
 };
 
-export default Productadmin;
+export default ItemOrders;

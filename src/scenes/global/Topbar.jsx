@@ -85,6 +85,11 @@ const toggleUser = () => {
                 <span>Customer Admin</span>
               </Link>
             </Box>
+            <Box m="0" p="5px" justifyContent="center" borderRadius="4px">
+              <Link to="/orders" className="menu-item">
+                <span>Order Admin</span>
+              </Link>
+            </Box>
             </>
             ) : (
               <></>
