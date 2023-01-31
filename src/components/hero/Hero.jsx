@@ -12,11 +12,11 @@ const Hero = () => {
 
         {/* left side */}
         <div className={css.h_side}>
-            <span className={css.text1}>Left Hero side</span>
+            {/* <span className={css.text1}>Left Hero side</span> */}
 
             <div className={css.text2}>
-                <span>Trendy collection</span>
-                <span>Some random text to look at. Adding an extra line of text to make  it longer.</span>
+                {/* <span>Trendy collection</span>
+                <span>Some random text to look at. Adding an extra line of text to make  it longer.</span> */}
             </div>
         </div>
     
@@ -25,7 +25,7 @@ const Hero = () => {
         <div className={css.wrapper}>
             <div className={css.blueCircle}></div>
             <img src={HeroImg} alt="" width={600} />
-            <div className={css.cart2}>
+            {/* <div className={css.cart2}>
                 <ShoppingCartIcon />
 
                 <div className={css.signup}>
@@ -35,7 +35,7 @@ const Hero = () => {
                         <ArrowForwardIosIcon />
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
 
         {/* right side */}

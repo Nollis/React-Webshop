@@ -11,11 +11,6 @@ html,
   font-family: 'Poppins', sans-serif;
 }
 
-body,
-#root {
-  
-}
-
 .app {
   display: flex;
   position: relative;
