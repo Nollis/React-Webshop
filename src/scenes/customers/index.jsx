@@ -180,15 +180,15 @@ const Customers = () => {
             color: "#666666",
           },
           "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "var(--green)",
+            backgroundColor: "var(--white)",
             borderBottom: "none",
           },
           "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: "var(--green2)",
+            backgroundColor: "var(--white2)",
           },
           "& .MuiDataGrid-footerContainer": {
             borderTop: "none",
-            backgroundColor: "var(--green)",
+            backgroundColor: "var(--white)",
           },
           "& .MuiCheckbox-root": {
             color: `${"#666666"} !important`,

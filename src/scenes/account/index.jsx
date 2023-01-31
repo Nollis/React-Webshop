@@ -28,12 +28,7 @@ const Account = () => {
     
     api.post(`/api/Candy/register`, values)
     .then((res) => {
-      if (res.data !== '') {
         alert("Successfully created account!");
-    }
-    else {
-        alert("Something failed!");
-    }
     })
     .catch(function (res) {
       console.log(res);

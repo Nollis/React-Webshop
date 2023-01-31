@@ -13,7 +13,10 @@ const Login = () => {
 
     const handleFormSubmit = (values) => {
         
-        api.post(`/api/Candy/login`, values).then((res) => {
+        api(`/api/Candy/login`, {
+            method: "post",
+            data: values,
+            withCredentials: false}).then((res) => {
             const UID = res.data.userId.replace(/\%20/g, '');
             console.log(res.data);
             if (res.data !== '') {
