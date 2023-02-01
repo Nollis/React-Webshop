@@ -36,7 +36,7 @@ function EditToolbar(props) {
   return (
     <GridToolbarContainer>
       <Button variant="primary" startIcon={<Add />} onClick={handleClick}>
-        Add Candy
+        Add Customer
       </Button>
     </GridToolbarContainer>
   );
