@@ -17,7 +17,7 @@
 
 .products {
     display: grid;
-    width: 90%;
+    width: 70%;
     grid-template-columns: 20% auto;
 }
 
@@ -33,6 +33,7 @@
 .menu>li{
 position: relative;
   margin: 3px 15px;
+  max-width: 220px;
   outline: none;
   text-decoration: none;
   display: flex;
@@ -103,6 +104,7 @@ position: relative;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     height: 25rem;
+    /* change this */
     width: 60rem;
     overflow-y: scroll;
     grid-gap: 2rem;
@@ -121,8 +123,9 @@ position: relative;
 }
 
 .product>img {
-    top: 3rem;
-    width: 6rem;
+    top: 6rem;
+    width: 4rem;
+   
 }
 
 @media screen and (max-width: 856px) {

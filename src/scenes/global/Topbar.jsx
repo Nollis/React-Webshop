@@ -57,12 +57,14 @@ const toggleUser = () => {
       {/* Logo */}
       <Box display="flex">
         <Link to="/">
-          <img src={Logo} alt="" height="50px" />
+          <img src={Logo} alt="" height="60px" />
         </Link>
+        
         {admin ?
-        <Button onClick={() => toggleAdmin()}>User</Button>
+
+        <a onClick={() => toggleAdmin()} className="btn-header">User</a>
         :
-        <Button onClick={() => toggleUser()}>Admin</Button>
+        <a onClick={() => toggleUser()} className="btn-header">Admin</a>
       }
       </Box>
 
@@ -94,11 +96,17 @@ const toggleUser = () => {
             ) : (
               <></>
           )}
+          <Box m="0" p="5px" justifyContent="center" borderRadius="4px">
+          <Link to="/" className="menu-item">
+            <span>HOME</span>
+          </Link>
+        </Box>
         <Box m="0" p="5px" justifyContent="center" borderRadius="4px">
           <Link to="/account" className="menu-item">
             <span>Create Account</span>
           </Link>
         </Box>
+        
         <Box m="0" p="5px" justifyContent="center" borderRadius="4px">
           <IsLoggedIn />
         </Box>
