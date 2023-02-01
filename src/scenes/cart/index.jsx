@@ -28,7 +28,7 @@ function Cart(props) {
       return {
         CandyId: obj.candyId,
         CandyName: obj.candyName,
-        Price: obj.candyPrice,
+        CandyPrice: obj.candyPrice,
         Quantity: obj.Quantity,
         CartId: CartId,
       };
