@@ -17,57 +17,58 @@ function Cart(props) {
 
   function postOrderItem(orderItem) {
     
-    return api.post(`/api/Candy/purchase`, orderItem);
+    return api.post(`/api/Candy/add`, orderItem);
   }
 
   async function checkOut() {
     const CartId = parseInt(cookie.CartId);
     
 
-    const itemorders = cartItems.map((obj) => {
-      return {
-        CandyId: obj.candyId,
-        CandyName: obj.candyName,
-        Price: obj.candyPrice,
-        Quantity: obj.Quantity,
-        CartId: CartId,
-      };
+    const addCartId = cartItems.map((obj) => {
+     
       // return {
-      //   ...obj,
-      //   cartId: CartId,
+      //   CandyId: obj.candyId,
+      //   CandyName: obj.candyName,
+      //   CandyPrice: obj.candyPrice,
+      //   Quantity: obj.Quantity,
+      //   CartId: CartId,
       // };
+      return {
+        ...obj,
+        cartId: CartId,
+      };
     });
 
-    // let i = 0;
+    let i = 0;
 
-    // await Promise.all(
-    //   addCartId.map((orderItem) =>
-    //     postOrderItem(orderItem)
-    //       .then((res) => {
-    //         i++;
-    //         console.log(res.data);
-    //         if(i === addCartId.length) {
-    //           localStorage.clear();
-    //         }
-    //       })
-    //       .catch((err) => {
-    //         console.error(err);
-    //       })
-    //   )
-    // );
-     
-
-
-      await api.get(`/api/Candy/purchase`, itemorders).then((res) => {
-        console.log(res.data);
-        if (res.data !== "") {
-          localStorage.clear();
-          alert("Items added to order.");
-        } else {
-          alert("Order failed!");
+    await Promise.all(
+      addCartId.map((orderItem) =>
+        postOrderItem(orderItem)
+          .then((res) => {
+            i++;
+            console.log(res.data);
+            if(i === addCartId.length) {
+              localStorage.clear();
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          })
+      )
+    );
         }
-      })
-  }
+
+
+  //     await api.post(`/api/Candy/add`, itemorders).then((res) => {
+  //       console.log(res.data);
+  //       if (res.data !== "") {
+  //         localStorage.clear();
+  //         alert("Items added to order.");
+  //       } else {
+  //         alert("Order failed!");
+  //       }
+  //     })
+  // }
 
   function deleteCart() {
     localStorage.clear();

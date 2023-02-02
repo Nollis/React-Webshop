@@ -104,7 +104,12 @@ position: relative;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     height: 25rem;
+
+    /* change this */
+    width: 60rem;
+
     width: 80rem;
+
     overflow-y: scroll;
     grid-gap: 2rem;
     justify-content: space-between;
@@ -122,8 +127,9 @@ position: relative;
 }
 
 .product>img {
-    top: 3rem;
-    width: 6rem;
+    top: 6rem;
+    width: 4rem;
+   
 }
 
 @media screen and (max-width: 856px) {
